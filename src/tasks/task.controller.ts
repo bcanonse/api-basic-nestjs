@@ -15,17 +15,24 @@ import { Request, Response } from 'express';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { ValidateTaskPipe } from './pipes/validatetask/validatetask.pipe';
 import { TaskGuard } from './guards/task/task.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
 @Controller({})
 export class TasksController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get('/tasks')
+  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiResponse({ status: 200, description: 'Return all tasks' })
   getAllTasks(@Query() query: any) {
     return this.taskService.getAllTasks();
   }
 
   @Get('/tasks/:id')
+  @ApiOperation({ summary: 'Get task by id' })
+  @ApiResponse({ status: 200, description: 'Return task' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
   getAllTaskById(@Param('id') id: string) {
     console.log(id);
     return this.taskService.getAllTasks();
@@ -41,6 +48,7 @@ export class TasksController {
   }
 
   @Post('/tasks')
+  @ApiOperation({ summary: 'Create task' })
   createTask(@Body() task: CreateTaskDto) {
     return this.taskService.createTask(task);
   }
