@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -11,6 +12,7 @@ import {
 import { TaskService } from './task.service';
 import { Request, Response } from 'express';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { ValidateTaskPipe } from './pipes/validatetask/validatetask.pipe';
 
 @Controller({})
 export class TasksController {
@@ -39,5 +41,16 @@ export class TasksController {
   @Post('/tasks')
   createTask(@Body() task: CreateTaskDto) {
     return this.taskService.createTask(task);
+  }
+
+  @Get('tasks/ticket/:num')
+  getTaskTicket(@Param('num', ParseIntPipe) num: number) {
+    return num + 14;
+  }
+
+  @Get('pipe')
+  getTicket(@Query(ValidateTaskPipe) query: { name: string; age: number }) {
+    console.log(typeof query.age);
+    return `Hello ${query.name}, you are ${query.age} years old`;
   }
 }
