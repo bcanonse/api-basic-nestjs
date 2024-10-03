@@ -8,11 +8,13 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Request, Response } from 'express';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { ValidateTaskPipe } from './pipes/validatetask/validatetask.pipe';
+import { TaskGuard } from './guards/task/task.guard';
 
 @Controller({})
 export class TasksController {
@@ -49,6 +51,7 @@ export class TasksController {
   }
 
   @Get('pipe')
+  @UseGuards(TaskGuard)
   getTicket(@Query(ValidateTaskPipe) query: { name: string; age: number }) {
     console.log(typeof query.age);
     return `Hello ${query.name}, you are ${query.age} years old`;
